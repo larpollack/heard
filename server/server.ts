@@ -23,6 +23,20 @@ app.get("/transactions", async (req, res) => {
 	res.json(transactions);
 });
 
+app.get("/highest-transactions", async (req, res) => {
+	const transactions = await prisma.transaction.findMany()
+	transactions.sort((a,b) => (a.amount - b.amount)) 
+	return res.json(transactions[0])
+}) 
+
+// app.get("/balances", async (req, res) => {
+// 	const transactions = await prisma.transaction.findMany()
+// 	const balanceAmt = new Map()
+// 	balanceAmt.set(transactions.map((data)=>data.fromAccountId), transactions.map((data)=>data.amount)) 
+// 	transactions.map((data)=> data.)
+// 	return res.json(transactions[0])
+// }) 
+
 // Get a single transaction by id
 app.get("/transaction/:id", async (req, res) => {
 	const transaction = await prisma.transaction.findUnique({
@@ -31,6 +45,8 @@ app.get("/transaction/:id", async (req, res) => {
 	res.json(transaction);
 });
 
+
+//transactions.amount.sort (a,b) => (a, - b) return transactions[0]
 // Update a transaction by id
 app.put("/transaction/:id", async (req, res) => {
 	const transaction = await prisma.transaction.update({
